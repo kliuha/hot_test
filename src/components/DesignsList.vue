@@ -1,5 +1,11 @@
 <script setup lang="ts">
 import DesignCard from "./DesignCard.vue";
+import { useEditStore } from "@/stores/edit";
+import { useRouter } from "vue-router";
+
+const editStore = useEditStore();
+const router = useRouter();
+
 const DESIGNS_MOCK = [{
     cardId: "130",
     cardName: "Ostrov",
@@ -29,6 +35,18 @@ const DESIGNS_MOCK = [{
     cardName: "Flora",
     src: "/src/assets/img/design3.png"
 }]
+
+const goToEdit = (id: string, name: string, src: string) => {
+    if(id) {
+        editStore.selectedDesign = {
+            id: id,
+            name: name,
+            url: src
+        }
+        editStore.isPublished = true;
+    }
+    router.push("edit")
+};
 </script>
 
 <template>
@@ -39,10 +57,11 @@ const DESIGNS_MOCK = [{
     </div>
     <div class="designs-list">
         <DesignCard
-        v-for="design in DESIGNS_MOCK"
-        :card-id="design.cardId"
-        :card-name="design.cardName"
-        :src="design.src" />
+            v-for="design in DESIGNS_MOCK"
+            :card-id="design.cardId"
+            :card-name="design.cardName"
+            :src="design.src"
+            @click="goToEdit(design.cardId, design.cardName, design.src)" />
     </div>
   </div>
 </template>

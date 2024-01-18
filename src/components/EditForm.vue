@@ -1,18 +1,48 @@
 <script setup lang="ts">
-import DragDrop from './DragDrop.vue';
+import { computed, onBeforeUnmount } from 'vue';
+import DragDrop from "./DragDrop.vue";
+import { useEditStore } from "@/stores/edit";
 
+const editStore = useEditStore();
+
+const sliderText = computed(() => {
+  return editStore.isPublished ? "Опублікований" : "Неопублікований";
+});
+
+onBeforeUnmount(() => {
+  editStore.$reset();
+});
 </script>
 
 <template>
     <div class="form-wrapper">
         <div class="form-header">
             <label class="switch">
-                <input type="checkbox">
+                <input
+                  type="checkbox"
+                  v-model="editStore.isPublished">
                 <span class="slider round"></span>
             </label>
-            <span class="design-status">Неопублікований</span>
+            <span class="design-status">{{ sliderText }}</span>
         </div>
         <DragDrop />
+        <div class="form-fields">
+          <input
+            v-model="editStore.selectedDesign.id"
+            class="id-field"
+            type="number"
+            placeholder="###">
+          <input
+            v-model="editStore.selectedDesign.name"
+            class="name-field"
+            type="text"
+            placeholder="Назва дизайну">
+          <input
+            v-model="editStore.selectedDesign.url"
+            class="url-field"
+            type="url"
+            placeholder="https://design###.horoshop.ua/">
+        </div>
     </div>
 </template>
 
@@ -31,12 +61,48 @@ import DragDrop from './DragDrop.vue';
 .design-status {
     color: #000;
 }
+
+.form-fields {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.id-field {
+  width: 80px;
+}
+
+.name-field {
+  width: 512px;
+}
+
+.url-field {
+  width: 600px;
+}
+
+.url-field,
+.name-field,
+.id-field {
+  height: 32px;
+  border: 1px solid #00000033;
+  border-radius: 3px;
+}
+
+.url-field::placeholder,
+.name-field::placeholder,
+.id-field::placeholder {
+  color: var(--20-grey, rgba(0, 0, 0, 0.20));
+  font-size: 14px;
+  line-height: 20px;
+}
+
 /* The switch - the box around the slider */
 .switch {
   position: relative;
   display: inline-block;
   width: 60px;
   height: 34px;
+  margin-right: 10px;
 }
 
 /* Hide default HTML checkbox */
@@ -72,11 +138,11 @@ import DragDrop from './DragDrop.vue';
 }
 
 input:checked + .slider {
-  background-color: #2196F3;
+  background-color: #7AB10E;
 }
 
 input:focus + .slider {
-  box-shadow: 0 0 1px #2196F3;
+  box-shadow: 0 0 1px #7AB10E;
 }
 
 input:checked + .slider:before {

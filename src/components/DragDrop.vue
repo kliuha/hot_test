@@ -1,5 +1,5 @@
 <script setup>
-import Dropzone from "vue3-simple-dropzone";
+import UploadImages from "vue-upload-drop-images";
 
 function handler(event) {
   // Handel event
@@ -7,17 +7,10 @@ function handler(event) {
 </script>
 
 <template>
-    <Dropzone class="drop-wrapper" @onSelect="handler">
-      <img class="drop-image" src="../assets/img/drop.svg" />
-    </Dropzone>
+    <UploadImages class="drop-wrapper" :max="1" />
 </template>
 
 <style scoped>
-.drop-image {
-  width: 60px;
-  height: 48px;
-}
-
 .drop-wrapper {
   display: flex;
   width: 600px;
@@ -27,4 +20,19 @@ function handler(event) {
   border: 2px dashed #0000001A;
 }
 
+.drop-wrapper :deep(svg) {
+  width: 60px;
+  height: 48px;
+  fill: #0000001A;
+}
+
+.drop-wrapper :deep(.mainMessage) {
+  display: none;
+}
+
+.drop-wrapper :deep(.imgsPreview .imageHolder) {
+  width: 60px;
+  height: 48px;
+  fill: #0000001A;
+}
 </style>
